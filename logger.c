@@ -23,6 +23,7 @@ void log_impl(logger_t* log, const char* msg){
 
     log->log_msg = 1;
 
+
     pthread_cond_signal(&log->cond);
 
     pthread_mutex_unlock(&log->active_queue_mutex);
@@ -39,7 +40,7 @@ void log_to_queue(message_queue_t* mq, const char* msg){
 
     strcpy(node->msg,msg);
 
-    if(mq->tail == NULL){
+    if( mq->tail == NULL ){
         mq->head = node;
         mq->tail = node;
     }else{
@@ -76,7 +77,6 @@ void* logger_thread(void* param){
         
         while(node){
 
-            printf("logging...\n");
             fprintf(log->file,"%s\n",node->msg);
             fflush(log->file);
 
@@ -90,9 +90,12 @@ void* logger_thread(void* param){
         }
 
         inactive_queue->head = NULL;
-
+        inactive_queue->tail = NULL;
+        
         pthread_mutex_lock(&log->active_queue_mutex);
+        
         log->log_msg = 0;
+        
         pthread_mutex_unlock(&log->active_queue_mutex);
 
     }
