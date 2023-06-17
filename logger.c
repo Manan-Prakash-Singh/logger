@@ -75,7 +75,7 @@ void* logger_thread(void* param){
         message_node_t* node = inactive_queue->head;
         
         while(node){
-            
+
             printf("logging...\n");
             fprintf(log->file,"%s\n",node->msg);
             fflush(log->file);
@@ -90,6 +90,10 @@ void* logger_thread(void* param){
         }
 
         inactive_queue->head = NULL;
+
+        pthread_mutex_lock(&log->active_queue_mutex);
+        log->log_msg = 0;
+        pthread_mutex_unlock(&log->active_queue_mutex);
 
     }
 }
