@@ -6,8 +6,6 @@
 
 #include "logger.h"
 
-
-
 static
 void init_message_queue(message_queue_t* mq){
     mq->head = NULL;
