@@ -23,7 +23,6 @@ void log_impl(logger_t* log, const char* msg){
 
     log->log_msg = 1;
 
-
     pthread_cond_signal(&log->cond);
 
     pthread_mutex_unlock(&log->active_queue_mutex);
